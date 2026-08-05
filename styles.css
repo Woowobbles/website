@@ -1,0 +1,282 @@
+html, body {
+  margin: 0;
+  padding: 0;
+  background: #F8F5F0;
+}
+
+/* ── Header ── */
+header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  box-sizing: border-box;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 10vw;
+  z-index: 100;
+}
+header img {
+  height: 28px;
+  width: auto;
+  display: block;
+}
+#logo-wrap {
+  position: relative;
+  height: 28px;
+}
+#logo-wrap img {
+  height: 28px;
+  width: auto;
+  display: block;
+}
+#logo-white {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+header button {
+  background: rgba(248, 245, 240, 0.35);
+  border: 0px solid #111;
+  color: #111;
+  font-size: 0.8rem;
+  padding: 6px 16px;
+  border-radius: 4px;
+  cursor: pointer;
+  letter-spacing: 0.03em;
+}
+header button:hover {
+  background: #111;
+  color: #fff;
+}
+
+/* ── Scroll indicator ── */
+#scroll-indicator {
+  position: fixed;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 50;
+  opacity: 1;
+  transition: opacity 0.4s ease;
+  pointer-events: none;
+}
+#scroll-indicator video {
+  height: 48px;
+  width: auto;
+  display: block;
+}
+
+/* ── Video stage ── */
+#stage {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+}
+#crop {
+  width: 35vw;
+  height: 60vh;
+  overflow: hidden;
+  position: relative;
+}
+#vid {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* ── Experience section ── */
+#experience {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  height: 100vh;
+  width: 100%;
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+#experience img {
+  position: absolute;
+  width: 100%;
+  height: 120%;
+  top: -10%;
+  object-fit: cover;
+  opacity: 0;
+  transform: translateY(70px);
+  transition: opacity 0.9s ease, transform 0.9s ease;
+}
+#experience-text {
+  position: absolute;
+  width: 60%;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  font-family: 'Newsreader', Georgia, serif;
+  font-weight: 400;
+  font-size: 36pt;
+  line-height: 1.15;
+  color: #fff;
+}
+#experience-text .line-left   { text-align: left; }
+#experience-text .line-centre { text-align: center; }
+#experience-text .line-right  { text-align: right; }
+#experience-text em {
+  font-style: normal;
+  font-weight: 700;
+  color: #FFC06C;
+}
+
+#experience-text span {
+  display: block;
+  opacity: 0;
+  transform: translateY(40px);
+}
+
+/* Triggered when #experience gains .in-view */
+#experience.in-view img {
+  opacity: 1;
+  transform: translateY(0);
+}
+#experience.in-view .line-left {
+  animation: slideUpBounce 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) 0.55s forwards;
+}
+#experience.in-view .line-centre {
+  animation: slideUpBounce 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) 0.75s forwards;
+}
+#experience.in-view .line-right {
+  animation: slideUpBounce 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) 0.95s forwards;
+}
+
+@keyframes slideUpBounce {
+  from { opacity: 0; transform: translateY(40px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ── Portfolio sections ── */
+#gt-omega {
+  position: sticky;
+  top: 0;
+  z-index: 3;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+}
+.portfolio-image {
+  position: absolute;
+  top: -60px;
+  bottom: -60px;
+  left: 0;
+  width: 50%;
+  overflow: hidden;
+  cursor: pointer;
+}
+.portfolio-image::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: #000;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+}
+.portfolio-image:hover::after {
+  opacity: 0.15;
+}
+.portfolio-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: left center;
+  display: block;
+}
+.portfolio-info {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 50%;
+  height: 100%;
+  background: #F8F5F0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 24px;
+  padding: 60px;
+  box-sizing: border-box;
+}
+.portfolio-logo {
+  width: 220px;
+  height: auto;
+}
+.portfolio-tagline {
+  margin: 0;
+  font-family: 'Newsreader', Georgia, serif;
+  font-size: 1rem;
+  color: #8A8989;
+  text-align: center;
+  line-height: 1.6;
+}
+
+/* ── Skills cards ── */
+#skills {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  box-sizing: border-box;
+  display: flex;
+  gap: 16px;
+  padding: 0 10vw;
+}
+.skill-card {
+  flex: 1;
+  background: #F8F5F0;
+  border-radius: 16px 16px 0 0;
+  padding: 28px 24px;
+  box-shadow: 0 -4px 24px rgba(0,0,0,0.08);
+  opacity: 0;
+  transform: translateY(60px);
+}
+.skill-card h3 {
+  margin: 0 0 16px;
+  font-size: 1rem;
+  font-weight: 700;
+  font-family: sans-serif;
+  color: #111;
+}
+.tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.tags span {
+  font-size: 0.5rem;
+  font-family: sans-serif;
+  color: #333;
+  background: rgba(185, 185, 185, 0.2);
+  border: none;
+  border-radius: 999px;
+  padding: 3px 10px;
+  white-space: nowrap;
+}
+
+/* Cards pop in when #skills gains .in-view */
+#skills.in-view .skill-card:nth-child(1) {
+  animation: slideUpBounce 0.7s cubic-bezier(0.34, 1.56, 0.64, 1) 0.1s forwards;
+}
+#skills.in-view .skill-card:nth-child(2) {
+  animation: slideUpBounce 0.7s cubic-bezier(0.34, 1.56, 0.64, 1) 0.25s forwards;
+}
+#skills.in-view .skill-card:nth-child(3) {
+  animation: slideUpBounce 0.7s cubic-bezier(0.34, 1.56, 0.64, 1) 0.4s forwards;
+}

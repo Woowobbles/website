@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>My Website</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Newsreader:wght@400;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header>
+      <div id="logo-wrap">
+        <img src="images/misc/logo black.png" alt="Logo" />
+        <img id="logo-white" src="images/misc/logo white.png" alt="Logo" />
+      </div>
+      <button>Resumé</button>
+    </header>
+
+    <div id="scroll-indicator">
+      <video autoplay loop muted playsinline>
+        <source src="images/misc/scroll indicator.webm" type="video/webm" />
+      </video>
+    </div>
+
+    <div id="stage">
+      <div id="crop">
+        <video id="vid" autoplay loop muted playsinline>
+          <source src="images/landing/WebM main.webm" type="video/webm" />
+        </video>
+      </div>
+    </div>
+
+    <section id="experience">
+      <img src="images/landing/experience.png" alt="Experience" />
+      <div id="experience-text">
+        <span class="line-left"><em>10 years</em> experience in</span>
+        <span class="line-centre">UX design, UX research,</span>
+        <span class="line-right">and product roles</span>
+      </div>
+      <div id="skills">
+        <div class="skill-card">
+          <h3>UX Design</h3>
+          <div class="tags">
+            <span>Interaction design</span>
+            <span>Accessible design</span>
+            <span>Heuristic evaluation</span>
+            <span>Design workshops</span>
+            <span>Motion design</span>
+            <span>Design systems</span>
+          </div>
+        </div>
+        <div class="skill-card">
+          <h3>UX Research</h3>
+          <div class="tags">
+            <span>Research strategy</span>
+            <span>Moderation/facilitation</span>
+            <span>Insight communication</span>
+            <span>Survey design</span>
+            <span>Analysis &amp; synthesis</span>
+            <span>Research operations</span>
+          </div>
+        </div>
+        <div class="skill-card">
+          <h3>Product</h3>
+          <div class="tags">
+            <span>Product thinking</span>
+            <span>Product strategy</span>
+            <span>Cross-functional collaboration</span>
+            <span>Roadmapping</span>
+            <span>Experimentation/validation</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="gt-omega">
+      <div class="portfolio-image">
+        <img src="images/GT Omega/Homepage.png" alt="GT Omega project" />
+      </div>
+      <div class="portfolio-info">
+        <img src="images/GT Omega/logo.png" alt="GT Omega" class="portfolio-logo" />
+        <p class="portfolio-tagline">Modernising the e-commerce experience<br>for a leading sim racing brand</p>
+      </div>
+    </section>
+
+    <script src="main.js" defer></script>
+  </body>
+</html>
