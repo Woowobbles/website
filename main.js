@@ -113,7 +113,23 @@ function snapToSection(index) {
   if (index < 0 || index >= snapSections.length || isSnapping) return;
   isSnapping = true;
   currentSection = index;
-  smoothScrollTo(index * window.innerHeight, 1400);
+
+  // Trigger entrance animations for the target section immediately
+  // so they complete during the scroll rather than after arrival
+  if (index === 1 && !document.getElementById('experience').classList.contains('in-view')) {
+    document.getElementById('experience').classList.add('in-view');
+    document.getElementById('skills').classList.add('in-view');
+  }
+
+  const target = index === snapSections.length - 1
+    ? document.documentElement.scrollHeight - window.innerHeight
+    : index * window.innerHeight;
+
+  const onDone = index === 2
+    ? () => { document.getElementById('gt-omega').classList.add('in-view'); }
+    : undefined;
+
+  smoothScrollTo(target, 1800, onDone);
 }
 
 window.addEventListener('wheel', (e) => {
@@ -164,13 +180,9 @@ window.addEventListener('scroll', () => {
   const exp     = document.getElementById('experience');
   const expImg  = exp.querySelector('img');
   const expDelta = Math.max(0, scrollY - window.innerHeight);
-  expImg.style.transform = `translateY(calc(${expDelta * 0.5}px))`;
+  expImg.style.transform = `translateY(${-expDelta * 0.5}px)`;
 
-  // GT Omega: portfolio image recedes at 50%
-  const gt      = document.getElementById('gt-omega');
-  const gtImg   = gt.querySelector('.portfolio-image');
-  const gtDelta  = Math.max(0, scrollY - 2 * window.innerHeight);
-  gtImg.style.transform = `translateY(${-gtDelta * 0.5}px)`;
+  // GT Omega: no parallax needed (last section)
 });
 
 // Experience section + skills cards entrance animation

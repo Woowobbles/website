@@ -1,7 +1,10 @@
 html, body {
   margin: 0;
   padding: 0;
-  background: #F8F5F0;
+  background: #f4f4f4;
+  font-family: 'Newsreader', Georgia, serif;
+  font-weight: 400;
+  scrollbar-gutter: stable;
 }
 
 /* ── Header ── */
@@ -37,7 +40,7 @@ header img {
   left: 0;
 }
 header button {
-  background: rgba(248, 245, 240, 0.35);
+  background: rgba(244, 244, 244, 0.35);
   border: 0px solid #111;
   color: #111;
   font-size: 0.8rem;
@@ -126,6 +129,7 @@ header button:hover {
   font-size: 36pt;
   line-height: 1.15;
   color: #fff;
+  transform: translateY(-8vh);
 }
 #experience-text .line-left   { text-align: left; }
 #experience-text .line-centre { text-align: center; }
@@ -167,18 +171,21 @@ header button:hover {
   position: sticky;
   top: 0;
   z-index: 3;
+  background: #f4f4f4;
   width: 100vw;
   height: 100vh;
   overflow: hidden;
 }
 .portfolio-image {
   position: absolute;
-  top: -60px;
-  bottom: -60px;
+  top: 0;
+  bottom: 0;
   left: 0;
   width: 50%;
   overflow: hidden;
   cursor: pointer;
+  display: block;
+  text-decoration: none;
 }
 .portfolio-image::after {
   content: '';
@@ -205,11 +212,11 @@ header button:hover {
   right: 0;
   width: 50%;
   height: 100%;
-  background: #F8F5F0;
+  background: #f4f4f4;
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  align-items: center;
+  justify-content: flex-end;
+  align-items: flex-start;
   gap: 24px;
   padding: 60px;
   box-sizing: border-box;
@@ -217,14 +224,25 @@ header button:hover {
 .portfolio-logo {
   width: 220px;
   height: auto;
+  opacity: 0;
+  transform: translateY(30px);
 }
 .portfolio-tagline {
   margin: 0;
   font-family: 'Newsreader', Georgia, serif;
+  font-weight: 50;
   font-size: 1rem;
   color: #8A8989;
-  text-align: center;
+  text-align: left;
   line-height: 1.6;
+  opacity: 0;
+  transform: translateY(30px);
+}
+#gt-omega.in-view .portfolio-logo {
+  animation: slideUpBounce 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) 0.2s forwards;
+}
+#gt-omega.in-view .portfolio-tagline {
+  animation: slideUpBounce 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) 0.4s forwards;
 }
 
 /* ── Skills cards ── */
@@ -240,7 +258,7 @@ header button:hover {
 }
 .skill-card {
   flex: 1;
-  background: #F8F5F0;
+  background: #f4f4f4;
   border-radius: 16px 16px 0 0;
   padding: 28px 24px;
   box-shadow: 0 -4px 24px rgba(0,0,0,0.08);
