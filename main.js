@@ -36,8 +36,8 @@ function updateLogoClip(wVw, hVh) {
 function applyProgress(p) {
   const w = 35 + 65 * p; // 35vw → 100vw
   const h = 60 + 40 * p; // 60vh → 100vh
-  crop.style.width  = w + 'vw';
-  crop.style.height = h + 'vh';
+  crop.style.width  = p >= 1 ? '100%' : w + 'vw';
+  crop.style.height = p >= 1 ? '100%' : h + 'vh';
   updateLogoClip(w, h);
 }
 
@@ -183,6 +183,14 @@ window.addEventListener('scroll', () => {
   expImg.style.transform = `translateY(${-expDelta * 0.5}px)`;
 
   // GT Omega: no parallax needed (last section)
+
+  // Logo wipe: clip white logo based on GT Omega sliding in from below
+  if (unlocked) {
+    const r = logoWhite.getBoundingClientRect();
+    const gtOmegaTop = 2 * window.innerHeight - scrollY;
+    const clipBottom = Math.max(0, r.bottom - gtOmegaTop);
+    logoWhite.style.clipPath = `inset(0px 0px ${clipBottom}px 0px)`;
+  }
 });
 
 // Experience section + skills cards entrance animation
