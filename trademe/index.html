@@ -4,9 +4,67 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Trade Me — Case Study</title>
+    <link rel="stylesheet" href="../project-page.css" />
+    <script>
+      (function () {
+        const key = 'timelineProjectTransition';
+        const normalizePath = (value) => {
+          if (typeof value !== 'string') return '/';
+          const withoutIndex = value.replace(/index\.html$/i, '');
+          const normalized = withoutIndex.replace(/\/+$/, '');
+          return normalized === '' ? '/' : normalized;
+        };
+        window.__projectTransitionPayload = null;
+        try {
+          const raw = sessionStorage.getItem(key);
+          if (!raw) return;
+          const payload = JSON.parse(raw);
+          if (!payload) return;
+          const payloadPath = normalizePath(payload.path || '');
+          const currentPath = normalizePath(window.location.pathname);
+          if (payloadPath !== currentPath) return;
+          window.__projectTransitionPayload = payload;
+          document.documentElement.classList.add('page-transition-in');
+          document.documentElement.style.setProperty('--transition-image', `url("${payload.image}")`);
+          const aspect = Number.isFinite(payload.aspect) ? payload.aspect : 0.5625;
+          document.documentElement.style.setProperty('--hero-target-width', payload.targetWidth || '100dvw');
+          document.documentElement.style.setProperty('--hero-target-left', payload.targetLeft || '0px');
+          document.documentElement.style.setProperty('--hero-target-height', payload.targetHeight || `${(aspect * 100).toFixed(3)}vw`);
+          document.documentElement.style.setProperty('--hero-target-top', payload.targetTop || `calc(50dvh - (${(aspect * 100).toFixed(3)}vw * 0.5))`);
+          sessionStorage.removeItem(key);
+        } catch (error) {
+          // If storage is blocked or malformed, continue without transition overlay.
+        }
+      }());
+    </script>
   </head>
-  <body>
-    <p>Trade Me case study coming soon.</p>
-    <a href="/">← Back</a>
+  <body style="--transition-image: url('hero.png'); --hero-target-width: 100dvw; --hero-target-left: 0px; --hero-target-height: 100dvh; --hero-target-top: 0px;">
+    <header>
+      <div id="logo-wrap">
+        <img src="../images/misc/logo black.png" alt="Logo" />
+        <img id="logo-white" src="../images/misc/logo white.png" alt="Logo" />
+      </div>
+      <button>Resumé</button>
+    </header>
+
+    <div id="scroll-indicator">
+      <video autoplay loop muted playsinline>
+        <source src="../images/misc/scroll indicator.webm" type="video/webm" />
+      </video>
+    </div>
+
+    <main class="case-hero">
+      <img class="case-hero-media" src="hero.png" alt="Trade Me hero" />
+    </main>
+    <script>
+      (function () {
+        const payload = window.__projectTransitionPayload;
+        if (!payload) return;
+        const heroImg = document.querySelector('.case-hero-media');
+        if (heroImg && payload.image) {
+          heroImg.src = payload.image;
+        }
+      }());
+    </script>
   </body>
 </html>
