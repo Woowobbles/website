@@ -166,83 +166,178 @@ header button:hover {
   to   { opacity: 1; transform: translateY(0); }
 }
 
-/* ── Portfolio sections ── */
-#gt-omega {
-  position: sticky;
-  top: 0;
+/* ── Projects timeline ── */
+#projects-timeline {
+  position: relative;
   z-index: 3;
   background: #f4f4f4;
   width: 100%;
-  height: 100vh;
-  overflow: hidden;
+  padding: 140px 0 120px;
 }
-.portfolio-image {
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  width: 50%;
-  overflow: hidden;
-  cursor: pointer;
-  display: block;
-  text-decoration: none;
+.timeline-shell {
+  width: min(1280px, 92vw);
+  margin: 0 auto;
 }
-.portfolio-image::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: #000;
-  opacity: 0;
-  transition: opacity 0.3s ease;
-  pointer-events: none;
+.timeline-kicker {
+  margin: 0 0 24px;
+  text-align: center;
+  font-family: sans-serif;
+  font-size: 1.05rem;
+  letter-spacing: 0.01em;
+  color: #2a2a2a;
 }
-.portfolio-image:hover::after {
-  opacity: 0.15;
-}
-.portfolio-image img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  object-position: left center;
-  display: block;
-}
-.portfolio-info {
-  position: absolute;
-  top: 0;
-  right: 0;
-  width: 50%;
-  height: 100%;
-  background: #f4f4f4;
+#timeline-items {
+  position: relative;
   display: flex;
   flex-direction: column;
-  justify-content: flex-end;
-  align-items: flex-start;
-  gap: 24px;
-  padding: 60px;
-  box-sizing: border-box;
+  gap: 84px;
 }
-.portfolio-logo {
-  width: 220px;
-  height: auto;
-  opacity: 0;
-  transform: translateY(30px);
+#timeline-items::before {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: 0;
+  bottom: 0;
+  width: 1px;
+  transform: translateX(-50%);
+  background: #d7d7d7;
 }
-.portfolio-tagline {
+.timeline-item {
+  position: relative;
+  min-height: 66vh;
+  display: grid;
+  grid-template-columns: minmax(260px, 1fr) 90px 40vw;
+  align-items: center;
+  gap: 0;
+}
+.timeline-item::before {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #151515;
+  transform: translate(-50%, -50%);
+  z-index: 2;
+}
+.timeline-content {
+  grid-column: 1;
+  grid-row: 1;
+  max-width: 360px;
+  justify-self: end;
+  align-self: center;
+  margin-right: 26px;
+  opacity: 1;
+  transform: none;
+}
+.timeline-item.is-right .timeline-content {
+  grid-column: 3;
+  justify-self: start;
+  margin-left: 26px;
+  margin-right: 0;
+}
+.timeline-type {
+  margin: 0 0 8px;
+  color: #464646;
+  font-size: 0.95rem;
+  font-family: sans-serif;
+}
+.timeline-title {
   margin: 0;
-  font-family: 'Newsreader', Georgia, serif;
-  font-weight: 50;
-  font-size: 1rem;
-  color: #8A8989;
-  text-align: left;
-  line-height: 1.6;
-  opacity: 0;
-  transform: translateY(30px);
+  color: #171717;
+  font-size: clamp(1.6rem, 3.6vw, 2.7rem);
+  line-height: 1.02;
+  font-weight: 400;
 }
-#gt-omega.in-view .portfolio-logo {
-  animation: slideUpBounce 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) 0.2s forwards;
+.timeline-summary {
+  margin: 16px 0 0;
+  color: #727272;
+  font-family: sans-serif;
+  font-size: 0.86rem;
+  line-height: 1.65;
 }
-#gt-omega.in-view .portfolio-tagline {
-  animation: slideUpBounce 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) 0.4s forwards;
+.timeline-media {
+  grid-column: 3;
+  grid-row: 1;
+  position: relative;
+  width: 40vw;
+  max-width: 40vw;
+  height: clamp(300px, 44vw, 520px);
+  align-self: center;
+  overflow: hidden;
+  display: block;
+  text-decoration: none;
+  justify-self: end;
+  margin-right: 0;
+}
+.timeline-item.is-right .timeline-media {
+  grid-column: 1;
+  justify-self: start;
+  margin-right: 0;
+  margin-left: 0;
+}
+.timeline-media img {
+  width: 100%;
+  height: 100%;
+  margin-top: 0;
+  object-fit: cover;
+  object-position: right center;
+}
+.timeline-item.is-right .timeline-media img {
+  object-position: left center;
+}
+.timeline-item.in-view .timeline-content {
+  animation: none;
+}
+
+@media (min-width: 901px) {
+  #timeline-items::before {
+    left: 50%;
+    transform: translateX(-50%);
+  }
+  .timeline-item {
+    grid-template-columns: minmax(260px, 1fr) 90px 40vw;
+    padding-left: 0;
+  }
+}
+
+@media (max-width: 900px) {
+  #projects-timeline {
+    padding: 96px 0 86px;
+  }
+  #timeline-items {
+    gap: 62px;
+  }
+  #timeline-items::before {
+    left: 18px;
+    transform: none;
+  }
+  .timeline-item {
+    min-height: auto;
+    grid-template-columns: 1fr;
+    gap: 18px;
+    padding-left: 42px;
+  }
+  .timeline-item::before {
+    left: 18px;
+    top: 12px;
+    transform: translate(-50%, 0);
+  }
+  .timeline-content,
+  .timeline-item.is-right .timeline-content,
+  .timeline-media,
+  .timeline-item.is-right .timeline-media {
+    grid-column: 1;
+    justify-self: start;
+    width: 40vw;
+    max-width: 40vw;
+    margin: 0;
+  }
+  .timeline-media {
+    height: clamp(240px, 58vw, 420px);
+  }
 }
 
 /* ── Skills cards ── */
