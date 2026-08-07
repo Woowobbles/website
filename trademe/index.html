@@ -65,6 +65,17 @@
           heroImg.src = payload.image;
         }
       }());
+
+      (function () {
+        const RETURN_ANCHOR_KEY = 'projectReturnAnchor';
+        window.addEventListener('pagehide', () => {
+          try {
+            sessionStorage.setItem(RETURN_ANCHOR_KEY, JSON.stringify({ href: 'trademe/' }));
+          } catch (error) {
+            // Ignore storage failures and fall back to normal history behavior.
+          }
+        });
+      }());
     </script>
   </body>
 </html>

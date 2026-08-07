@@ -2,7 +2,7 @@ html, body {
   margin: 0;
   padding: 0;
   overflow-x: hidden;
-  overflow-y: hidden;
+  overflow-y: auto;
 }
 
 body {
@@ -83,7 +83,8 @@ header button:hover {
 .case-hero {
   min-height: 100vh;
   width: 100%;
-  position: relative;
+  position: sticky;
+  top: 0;
   overflow: hidden;
   box-sizing: border-box;
   display: flex;
@@ -92,16 +93,282 @@ header button:hover {
 }
 
 .case-hero-media {
-  position: fixed;
-  left: var(--hero-target-left, 0px);
-  width: var(--hero-target-width, 100dvw);
-  top: var(--hero-target-top, 0px);
-  height: var(--hero-target-height, 100dvh);
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
   display: block;
   object-fit: cover;
   object-position: center center;
-  transform: none;
+  transform: translate3d(0, var(--hero-parallax-y, 0px), 0);
+  will-change: transform;
   z-index: 0;
+}
+
+.case-section {
+  position: relative;
+  z-index: 1;
+  background: #f4f4f4;
+  color: #131313;
+}
+
+.case-overview {
+  height: 100vh;
+  background: #f4f4f4;
+  padding: 0 8vw;
+  display: flex;
+  align-items: center;
+}
+
+.case-overview-grid {
+  width: min(1180px, 100%);
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: minmax(280px, 1fr) minmax(280px, 1fr);
+  gap: clamp(28px, 6vw, 88px);
+  align-items: center;
+}
+
+.case-overview-brand {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(20px, 2.5vw, 30px);
+  transform: translate3d(0, var(--overview-parallax-y, 0px), 0);
+  will-change: transform;
+}
+
+.case-brand-logo {
+  width: min(100%, 340px);
+  height: auto;
+  display: block;
+}
+
+.case-overview.bounce-ready .case-brand-logo,
+.case-overview.bounce-ready .case-overview-title,
+.case-overview.bounce-ready .case-overview-copy p {
+  opacity: 0;
+  transform: translateY(40px);
+}
+
+.case-overview.in-view .case-brand-logo {
+  animation: slideUpBounce 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) 0.45s forwards;
+}
+
+.case-overview.in-view .case-overview-title {
+  animation: slideUpBounce 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) 0.62s forwards;
+}
+
+.case-overview.in-view .case-overview-copy p:nth-of-type(1) {
+  animation: slideUpBounce 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) 0.8s forwards;
+}
+
+.case-overview.in-view .case-overview-copy p:nth-of-type(2) {
+  animation: slideUpBounce 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) 0.95s forwards;
+}
+
+.case-overview.in-view .case-overview-copy p:nth-of-type(3) {
+  animation: slideUpBounce 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) 1.08s forwards;
+}
+
+.case-overview-title {
+  margin: 0;
+  font-size: 24pt;
+  line-height: 1.05;
+  font-weight: 400;
+  color: #8A8989;
+}
+
+.case-overview-copy p {
+  margin: 0 0 36px;
+  font-family: 'Newsreader', Georgia, serif;
+  font-size: 14pt;
+  font-weight: 400;
+  line-height: 1.72;
+  color: #2b2b2b;
+}
+
+.case-overview-copy {
+  align-self: center;
+  transform: translate3d(0, var(--overview-parallax-y, 0px), 0);
+  will-change: transform;
+}
+
+.case-overview-copy .case-overview-label {
+  margin-bottom: 0;
+}
+
+.case-overview-copy p:last-child {
+  margin-bottom: 0;
+}
+
+.case-zoom-section {
+  height: 100vh;
+  background: #1e1e1e;
+  padding: 0;
+  overflow: hidden;
+  --zoom-start: 2;
+  --zoom-end: 1.5 ;
+  --zoom-progress: 0;
+}
+
+.case-zoom-image {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+  object-position: center center;
+  transform: scale(calc(var(--zoom-start) + ((var(--zoom-end) - var(--zoom-start)) * var(--zoom-progress))));
+  transform-origin: center center;
+  will-change: transform;
+}
+
+.case-video-section {
+  background: #1e1e1e;
+  padding: clamp(20px, 3vw, 44px) clamp(20px, 4vw, 56px);
+}
+
+.case-video {
+  width: 100%;
+  height: auto;
+  display: block;
+  clip-path: inset(0 2px 0 0);
+}
+
+.case-centred-copy {
+  height: 100vh;
+  background: #FAF7F3;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: clamp(24px, 4vw, 56px);
+}
+
+.case-centred-copy-inner {
+  width: min(780px, 92vw);
+  text-align: center;
+}
+
+.case-centred-copy-title {
+  margin: 0;
+  color: #1f1f1f;
+  font-size: clamp(2rem, 4.8vw, 4rem);
+  line-height: 1.05;
+  font-weight: 400;
+}
+
+.case-centred-copy-text {
+  margin: 14px 0 0;
+  color: #2b2b2b;
+  font-size: clamp(1.05rem, 1.7vw, 1.35rem);
+  line-height: 1.6;
+}
+
+.case-image-section {
+  background: #1e1e1e;
+  padding: 0;
+  overflow: hidden;
+}
+
+.case-image-section-media {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.case-image-section--no-bg {
+  background: #FAF7F3;
+}
+
+.case-outcomes {
+  height: 100vh;
+  background: #FAF7F3;
+  padding: clamp(24px, 4vw, 56px);
+  display: flex;
+  align-items: center;
+}
+
+.case-outcomes-grid {
+  width: min(1240px, 100%);
+  height: 100%;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: minmax(300px, 1fr) minmax(280px, 1fr);
+  gap: clamp(28px, 4.8vw, 72px);
+  align-items: stretch;
+}
+
+.case-outcomes-media-wrap {
+  width: 100%;
+  height: 100%;
+}
+
+.case-outcomes-media {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+}
+
+.case-outcomes-copy {
+  align-self: center;
+}
+
+.case-outcomes-title {
+  margin: 0;
+  color: #1f1f1f;
+  font-size: clamp(1.3rem, 2vw, 1.8rem);
+  line-height: 1.2;
+}
+
+.case-outcomes-text {
+  margin: 16px 0 0;
+  color: #2b2b2b;
+  font-size: clamp(1rem, 1.35vw, 1.2rem);
+  line-height: 1.7;
+}
+
+@media (max-width: 840px) {
+  .case-overview-grid {
+    grid-template-columns: 1fr;
+    gap: 34px;
+  }
+
+  .case-overview {
+    height: auto;
+    min-height: 100vh;
+    padding: clamp(72px, 11vw, 140px) 8vw;
+  }
+
+  .case-brand-logo {
+    width: min(72vw, 300px);
+  }
+
+  .case-overview-brand,
+  .case-overview-copy,
+  .case-hero-media {
+    transform: none;
+    will-change: auto;
+  }
+
+  .case-zoom-image {
+    transform: scale(var(--zoom-end));
+    will-change: auto;
+  }
+
+  .case-outcomes {
+    height: auto;
+    min-height: 100vh;
+  }
+
+  .case-outcomes-grid {
+    grid-template-columns: 1fr;
+    height: auto;
+  }
+
+  .case-outcomes-media-wrap,
+  .case-outcomes-media {
+    height: auto;
+  }
 }
 
 .case-hero::after {
@@ -162,6 +429,11 @@ html.page-transition-in body::before {
   z-index: 9999;
   pointer-events: none;
   animation: transitionReveal 760ms cubic-bezier(0.33, 1, 0.68, 1) forwards;
+}
+
+@keyframes slideUpBounce {
+  from { opacity: 0; transform: translateY(40px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
 @keyframes transitionReveal {

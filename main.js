@@ -38,9 +38,54 @@ const timelineProjects = [
 let timelineMediaImages = [];
 const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 const PROJECT_TRANSITION_KEY = 'timelineProjectTransition';
+const PROJECT_RETURN_ANCHOR_KEY = 'projectReturnAnchor';
 let fullscreenViewer = null;
 let fullscreenImage = null;
 let isImageAnimating = false;
+const experienceImage = document.querySelector('#experience img');
+let experienceImageLoaded = !experienceImage;
+
+if (experienceImage) {
+  // Force this asset to load even while out of view so scroll gating cannot deadlock.
+  experienceImage.loading = 'eager';
+  experienceImage.decoding = 'sync';
+  experienceImage.fetchPriority = 'high';
+
+  const onExperienceImageSettled = () => {
+    experienceImageLoaded = true;
+    if (accumulated >= SCROLL_NEEDED && !unlocked) {
+      processScroll(0);
+    }
+  };
+
+  if (experienceImage.complete) {
+    experienceImageLoaded = true;
+  } else {
+    experienceImage.addEventListener('load', onExperienceImageSettled, { once: true });
+    experienceImage.addEventListener('error', onExperienceImageSettled, { once: true });
+
+    const eagerPreload = new Image();
+    eagerPreload.addEventListener('load', onExperienceImageSettled, { once: true });
+    eagerPreload.addEventListener('error', onExperienceImageSettled, { once: true });
+    eagerPreload.src = experienceImage.currentSrc || experienceImage.src;
+  }
+}
+
+function resetFullscreenViewerState() {
+  if (!fullscreenViewer || !fullscreenImage) return;
+
+  fullscreenViewer.classList.remove('is-open', 'is-closing');
+  fullscreenViewer.setAttribute('aria-hidden', 'true');
+  fullscreenImage.style.left = '';
+  fullscreenImage.style.top = '';
+  fullscreenImage.style.width = '';
+  fullscreenImage.style.height = '';
+  fullscreenImage.style.transform = '';
+  fullscreenImage.src = '';
+  fullscreenImage.alt = '';
+  isImageAnimating = false;
+  document.body.style.overflow = '';
+}
 
 function asCssLength(value) {
   if (typeof value === 'number') return `${value}px`;
@@ -157,11 +202,12 @@ function ensureFullscreenViewer() {
 }
 
 function getViewportMetrics() {
+  const doc = document.documentElement;
   return {
     left: 0,
     top: 0,
-    width: window.innerWidth,
-    height: window.innerHeight
+    width: doc ? doc.clientWidth : window.innerWidth,
+    height: doc ? doc.clientHeight : window.innerHeight
   };
 }
 
@@ -282,18 +328,102 @@ function updateTimelineImageParallax() {
 }
 
 // Start locked
-document.documentElement.style.overflow = 'hidden';
-document.documentElement.style.height = '100%';
-document.body.style.overflow = 'hidden';
-document.body.style.height = '100%';
+function lockIntroScroll() {
+  document.documentElement.style.overflow = 'hidden';
+  document.documentElement.style.height = '100%';
+  document.body.style.overflow = 'hidden';
+  document.body.style.height = '100%';
+}
+
+function unlockIntroScroll() {
+  document.documentElement.style.overflow = '';
+  document.documentElement.style.height = '';
+  document.body.style.overflow = '';
+  document.body.style.height = '';
+}
+
+function consumeReturnAnchor() {
+  let payload = null;
+  try {
+    const raw = sessionStorage.getItem(PROJECT_RETURN_ANCHOR_KEY);
+    if (raw) {
+      payload = JSON.parse(raw);
+    }
+  } catch (error) {
+    payload = null;
+  }
+
+  try {
+    sessionStorage.removeItem(PROJECT_RETURN_ANCHOR_KEY);
+  } catch (error) {
+    // Ignore storage failures.
+  }
+
+  if (!payload || typeof payload.href !== 'string') return null;
+  return payload;
+}
+
+function isHistoryReturnNavigation() {
+  const navEntry = performance.getEntriesByType('navigation')[0];
+  return Boolean(navEntry && navEntry.type === 'back_forward');
+}
+
+function scrollToTimelineAnchor(href) {
+  if (typeof href !== 'string' || href.trim() === '') return;
+  const target = document.querySelector(`.timeline-media[data-href="${href}"]`);
+  if (!target) return;
+
+  const targetRect = target.getBoundingClientRect();
+  const targetTop = window.scrollY + targetRect.top;
+  const centeredOffset = (window.innerHeight - targetRect.height) * 0.5;
+  const scrollTop = Math.max(0, targetTop - centeredOffset);
+  window.scrollTo(0, scrollTop);
+}
 
 const SCROLL_NEEDED = 600; // px of scroll delta to complete the animation
 let accumulated = 0;
 let unlocked = false;
 let autoScrollRaf = null;
 
-// Apply initial state so white logo is fully clipped at load
-applyProgress(0);
+function restoreFromReturnAnchor(returnAnchor) {
+  if (!returnAnchor || typeof returnAnchor.href !== 'string') return;
+  accumulated = SCROLL_NEEDED;
+  unlocked = true;
+  unlockIntroScroll();
+  applyProgress(1);
+  document.getElementById('scroll-indicator').style.opacity = '0';
+
+  requestAnimationFrame(() => {
+    scrollToTimelineAnchor(returnAnchor.href);
+    updateTimelineImageParallax();
+  });
+}
+
+const returnAnchor = isHistoryReturnNavigation() ? consumeReturnAnchor() : null;
+
+if (returnAnchor) {
+  restoreFromReturnAnchor(returnAnchor);
+} else {
+  lockIntroScroll();
+  // Apply initial state so white logo is fully clipped at load
+  applyProgress(0);
+}
+
+window.addEventListener('pagehide', () => {
+  resetFullscreenViewerState();
+});
+
+window.addEventListener('pageshow', (event) => {
+  if (!event.persisted) return;
+  resetFullscreenViewerState();
+
+  const anchor = consumeReturnAnchor();
+  if (anchor) {
+    restoreFromReturnAnchor(anchor);
+  } else {
+    updateTimelineImageParallax();
+  }
+});
 
 function updateLogoClip(wVw, hVh) {
   const cropW = wVw / 100 * window.innerWidth;
@@ -328,18 +458,12 @@ function processScroll(delta) {
 
   document.getElementById('scroll-indicator').style.opacity = Math.max(0, 1 - p * 4);
 
-  if (p >= 1 && !unlocked) {
+  if (p >= 1 && !unlocked && experienceImageLoaded) {
     unlocked = true;
-    document.documentElement.style.overflow = '';
-    document.documentElement.style.height = '';
-    document.body.style.overflow = '';
-    document.body.style.height = '';
+    unlockIntroScroll();
   } else if (p < 1 && unlocked) {
     unlocked = false;
-    document.documentElement.style.overflow = 'hidden';
-    document.documentElement.style.height = '100%';
-    document.body.style.overflow = 'hidden';
-    document.body.style.height = '100%';
+    lockIntroScroll();
     window.scrollTo(0, 0);
   }
 }
@@ -421,6 +545,11 @@ window.addEventListener('resize', updateTimelineImageParallax);
 updateTimelineImageParallax();
 
 // Experience section + skills cards entrance animation
+const skillsSection = document.getElementById('skills');
+if (skillsSection) {
+  skillsSection.classList.add('in-view');
+}
+
 const experienceObserver = new IntersectionObserver((entries) => {
   entries.forEach((entry) => {
     if (entry.isIntersecting) {
@@ -428,10 +557,12 @@ const experienceObserver = new IntersectionObserver((entries) => {
       experienceObserver.unobserve(entry.target);
     }
   });
-}, { threshold: 0.15 });
+}, { threshold: 0.01 });
 
 experienceObserver.observe(document.getElementById('experience'));
-experienceObserver.observe(document.getElementById('skills'));
+if (skillsSection) {
+  experienceObserver.observe(skillsSection);
+}
 
 // Timeline reveal animation
 const timelineObserver = new IntersectionObserver((entries) => {

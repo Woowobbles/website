@@ -113,9 +113,9 @@ header button:hover {
   height: 120%;
   top: -10%;
   object-fit: cover;
-  opacity: 0;
-  transform: translateY(70px);
-  transition: opacity 0.9s ease;
+  opacity: 1;
+  transform: none;
+  transition: none;
 }
 #experience-text {
   position: absolute;

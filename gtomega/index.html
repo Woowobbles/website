@@ -56,6 +56,59 @@
     <main class="case-hero">
       <img class="case-hero-media" src="hero.png" alt="GT Omega hero" />
     </main>
+
+    <section class="case-section case-overview" aria-label="Project overview">
+      <div class="case-overview-grid">
+        <div class="case-overview-brand">
+          <img class="case-brand-logo" src="../images/GT Omega/logo.png" alt="GT Omega logo" />
+          <h2 class="case-overview-title">Moderning the e-commerce experience for a lead sim racing brand</h2>
+        </div>
+        <div class="case-overview-copy">
+          <p>GT Omega is an established Scottish brand specialising in sim racing equipment and gaming chairs. As the company expanded its product range, its website had become increasingly difficult to navigate, leading to customer frustration, drop-offs throughout the purchasing journey, and an inconsistent brand experience.</p>
+          <p class="case-overview-label"><strong>Objectives:</strong></p>
+          <p>Create a simpler, more intuitive shopping experience, improve navigation, strengthen brand consistency, and better showcase products and accessories to support customer decision-making and drive conversions.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="case-section case-zoom-section" aria-label="GT Omega gallery image">
+      <img class="case-zoom-image" src="../images/GT Omega/GT Omega 1.png" alt="GT Omega project visual" />
+    </section>
+
+    <section class="case-section case-video-section" aria-label="GT Omega motion preview">
+      <video class="case-video" autoplay loop muted playsinline preload="auto">
+        <source src="../images/GT Omega/GT Omega 1.mov" />
+        <source src="../images/GT Omega/Animation.webm" type="video/webm" />
+      </video>
+    </section>
+
+    <section class="case-section case-centred-copy" aria-label="GT Omega supporting copy">
+      <div class="case-centred-copy-inner">
+        <h2 class="case-centred-copy-title">Heading</h2>
+        <p class="case-centred-copy-text">Text underneath</p>
+      </div>
+    </section>
+
+    <section class="case-section case-image-section case-image-section--no-bg" aria-label="GT Omega gallery image two">
+      <img class="case-image-section-media" src="../images/GT Omega/Gt Omega 2.png" alt="GT Omega gallery image 2" />
+    </section>
+
+    <section class="case-section case-image-section" aria-label="GT Omega gallery image three">
+      <img class="case-image-section-media" src="../images/GT Omega/Gt Omega 3.png" alt="GT Omega gallery image 3" />
+    </section>
+
+    <section class="case-section case-outcomes" aria-label="GT Omega outcomes section">
+      <div class="case-outcomes-grid">
+        <div class="case-outcomes-media-wrap">
+          <img class="case-outcomes-media" src="../images/GT Omega/Gt Omega 4.png" alt="GT Omega outcomes visual" />
+        </div>
+        <div class="case-outcomes-copy">
+          <p class="case-outcomes-title"><strong>Outcomes</strong></p>
+          <p class="case-outcomes-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+        </div>
+      </div>
+    </section>
+
     <script>
       (function () {
         const payload = window.__projectTransitionPayload;
@@ -64,6 +117,136 @@
         if (heroImg && payload.image) {
           heroImg.src = payload.image;
         }
+      }());
+
+      (function () {
+        const RETURN_ANCHOR_KEY = 'projectReturnAnchor';
+        window.addEventListener('pagehide', () => {
+          try {
+            sessionStorage.setItem(RETURN_ANCHOR_KEY, JSON.stringify({ href: 'gtomega/' }));
+          } catch (error) {
+            // Ignore storage failures and fall back to normal history behavior.
+          }
+        });
+      }());
+
+      (function () {
+        const section = document.querySelector('.case-overview');
+        const leftCol = document.querySelector('.case-overview-brand');
+        const rightCol = document.querySelector('.case-overview-copy');
+        const heroImg = document.querySelector('.case-hero-media');
+        const scrollIndicator = document.getElementById('scroll-indicator');
+        const zoomSection = document.querySelector('.case-zoom-section');
+        if (!section || !leftCol || !rightCol || !heroImg || !scrollIndicator) return;
+
+        const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+        section.classList.add('bounce-ready');
+
+        if (reduceMotion) {
+          section.classList.add('in-view');
+          return;
+        }
+
+        const bounceObserver = new IntersectionObserver((entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              section.classList.add('in-view');
+            }
+          });
+        }, {
+          threshold: 0.35,
+          rootMargin: '0px 0px -8% 0px'
+        });
+
+        bounceObserver.observe(section);
+
+        const clamp = (value, min, max) => Math.min(max, Math.max(min, value));
+        const easeOut = (value) => 1 - Math.pow(1 - value, 2);
+        let ticking = false;
+
+        const updateParallax = () => {
+          ticking = false;
+          const rect = section.getBoundingClientRect();
+          const viewportHeight = window.innerHeight || 1;
+          const progress = clamp((viewportHeight - rect.top) / viewportHeight, 0, 1);
+          const indicatorFadeProgress = clamp(window.scrollY / (viewportHeight * 0.38), 0, 1);
+
+          const leftProgress = easeOut(progress);
+          const rightProgress = easeOut(clamp((progress - 0.2) / 0.8, 0, 1));
+          const leftShift = -120 * leftProgress;
+          const rightShift = -86 * rightProgress;
+
+          // Hero moves at half-strength compared with section parallax progression.
+          const averageColumnProgress = (leftProgress + rightProgress) * 0.5;
+          const heroShift = -43 * averageColumnProgress;
+
+          leftCol.style.setProperty('--overview-parallax-y', `${leftShift.toFixed(2)}px`);
+          rightCol.style.setProperty('--overview-parallax-y', `${rightShift.toFixed(2)}px`);
+          heroImg.style.setProperty('--hero-parallax-y', `${heroShift.toFixed(2)}px`);
+          scrollIndicator.style.opacity = `${(1 - indicatorFadeProgress).toFixed(3)}`;
+
+          if (zoomSection) {
+            const zoomRect = zoomSection.getBoundingClientRect();
+            const zoomProgress = clamp((viewportHeight - zoomRect.top) / viewportHeight, 0, 1);
+            zoomSection.style.setProperty('--zoom-progress', zoomProgress.toFixed(4));
+          }
+        };
+
+        const requestParallaxUpdate = () => {
+          if (ticking) return;
+          ticking = true;
+          window.requestAnimationFrame(updateParallax);
+        };
+
+        const scrollSections = Array.from(document.querySelectorAll('.case-hero, .case-section'));
+        const PAUSE_SCROLL_DELTA = 220;
+        let activePauseIndex = -1;
+        let activePauseDirection = 0;
+        let consumedPauseDelta = PAUSE_SCROLL_DELTA;
+
+        const getNearestSectionIndex = () => {
+          if (scrollSections.length === 0) return -1;
+          const viewportCenter = window.innerHeight * 0.5;
+          let nearestIndex = 0;
+          let nearestDistance = Number.POSITIVE_INFINITY;
+
+          scrollSections.forEach((sectionNode, index) => {
+            const r = sectionNode.getBoundingClientRect();
+            const sectionCenter = r.top + (r.height * 0.5);
+            const distance = Math.abs(sectionCenter - viewportCenter);
+            if (distance < nearestDistance) {
+              nearestDistance = distance;
+              nearestIndex = index;
+            }
+          });
+
+          return nearestIndex;
+        };
+
+        window.addEventListener('wheel', (event) => {
+          if (scrollSections.length < 2) return;
+          const direction = Math.sign(event.deltaY);
+          if (direction === 0) return;
+
+          const sectionIndex = getNearestSectionIndex();
+          if (sectionIndex === -1) return;
+
+          if (sectionIndex !== activePauseIndex || direction !== activePauseDirection) {
+            activePauseIndex = sectionIndex;
+            activePauseDirection = direction;
+            consumedPauseDelta = 0;
+          }
+
+          if (consumedPauseDelta < PAUSE_SCROLL_DELTA) {
+            consumedPauseDelta += Math.abs(event.deltaY);
+            event.preventDefault();
+          }
+        }, { passive: false });
+
+        window.addEventListener('scroll', requestParallaxUpdate, { passive: true });
+        window.addEventListener('resize', requestParallaxUpdate);
+        requestParallaxUpdate();
       }());
     </script>
   </body>
