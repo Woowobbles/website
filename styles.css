@@ -400,14 +400,14 @@ header button:hover {
   flex: 1;
   background: #f4f4f4;
   border-radius: 16px 16px 0 0;
-  padding: 28px 24px;
+  padding: 44px 24px;
   box-shadow: 0 -4px 24px rgba(0,0,0,0.08);
   opacity: 0;
   transform: translateY(60px);
 }
 .skill-card h3 {
   margin: 0 0 16px;
-  font-size: 1rem;
+  font-size: 1.22rem;
   font-weight: 700;
   font-family: sans-serif;
   color: #111;
@@ -418,13 +418,13 @@ header button:hover {
   gap: 6px;
 }
 .tags span {
-  font-size: 0.5rem;
+  font-size: 0.72rem;
   font-family: sans-serif;
   color: #333;
   background: rgba(185, 185, 185, 0.2);
   border: none;
   border-radius: 999px;
-  padding: 3px 10px;
+  padding: 6px 12px;
   white-space: nowrap;
 }
 
