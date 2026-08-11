@@ -3,8 +3,23 @@ const logoWhite = document.getElementById('logo-white');
 const timelineRoot = document.getElementById('timeline-items');
 
 const timelineProjects = [
+    {
+    type: 'UX Research',
+    title: 'Trade Me',
+    summary: 'Improving listing and buying journeys through product and UX collaboration.',
+    image: 'trademe/hero.png',
+    alt: 'Trade Me project hero image',
+    href: 'trademe/',
+    imageZoom: 1.1,
+    imagePositionX: 'left',
+    imagePositionY: 'center',
+    imagePanX: '-400px',
+    imagePanY: '0px',
+    imageOffsetX: '0px',
+    imageOffsetY: '0px'
+  },
   {
-    type: 'Website',
+    type: 'Website Design',
     title: 'GT Omega',
     summary: 'Modernising the e-commerce experience for a leading sim racing brand.',
     image: 'gtomega/hero.png',
@@ -19,13 +34,28 @@ const timelineProjects = [
     imageOffsetY: '0px'
   },
   {
-    type: 'Website',
-    title: 'Trade Me',
+    type: 'App Design',
+    title: 'Present Pal',
     summary: 'Improving listing and buying journeys through product and UX collaboration.',
-    image: 'trademe/hero.png',
-    alt: 'Trade Me project hero image',
-    href: 'trademe/',
-    imageZoom: 1.1,
+    image: 'presentpal/hero.png',
+    alt: 'Present Pal project hero image',
+    href: 'presentpal/',
+    imageZoom: 1.0,
+    imagePositionX: 'left',
+    imagePositionY: 'center',
+    imagePanX: '-200px',
+    imagePanY: '0px',
+    imageOffsetX: '0px',
+    imageOffsetY: '0px'
+  },
+  {
+    type: 'Website Design',
+    title: 'This Student Needs',
+    summary: 'Improving listing and buying journeys through product and UX collaboration.',
+    image: 'thisstudentneeds/hero.png',
+    alt: 'This Student Needs project hero image',
+    href: 'thisstudentneeds/',
+    imageZoom: 1.0,
     imagePositionX: 'left',
     imagePositionY: 'center',
     imagePanX: '-200px',
@@ -329,14 +359,17 @@ function updateTimelineImageParallax() {
 
 // Start locked
 function lockIntroScroll() {
-  document.documentElement.style.overflow = 'hidden';
+  // Keep a stable vertical scrollbar gutter so fixed header elements do not shift.
+  document.documentElement.style.overflowY = 'scroll';
+  document.documentElement.style.overflowX = 'hidden';
   document.documentElement.style.height = '100%';
   document.body.style.overflow = 'hidden';
   document.body.style.height = '100%';
 }
 
 function unlockIntroScroll() {
-  document.documentElement.style.overflow = '';
+  document.documentElement.style.overflowY = 'scroll';
+  document.documentElement.style.overflowX = '';
   document.documentElement.style.height = '';
   document.body.style.overflow = '';
   document.body.style.height = '';
@@ -546,22 +579,39 @@ updateTimelineImageParallax();
 
 // Experience section + skills cards entrance animation
 const skillsSection = document.getElementById('skills');
-if (skillsSection) {
-  skillsSection.classList.add('in-view');
+const experienceSection = document.getElementById('experience');
+let skillsRevealTimer = null;
+
+function revealSkillsAfterExperienceText() {
+  if (!skillsSection || skillsSection.classList.contains('in-view')) return;
+
+  const revealDelayMs = prefersReducedMotion ? 80 : 1780;
+  if (skillsRevealTimer) {
+    clearTimeout(skillsRevealTimer);
+  }
+
+  skillsRevealTimer = window.setTimeout(() => {
+    skillsSection.classList.add('in-view');
+    skillsRevealTimer = null;
+  }, revealDelayMs);
 }
 
 const experienceObserver = new IntersectionObserver((entries) => {
   entries.forEach((entry) => {
     if (entry.isIntersecting) {
       entry.target.classList.add('in-view');
+      if (entry.target.id === 'experience') {
+        revealSkillsAfterExperienceText();
+      }
       experienceObserver.unobserve(entry.target);
     }
   });
 }, { threshold: 0.01 });
 
-experienceObserver.observe(document.getElementById('experience'));
-if (skillsSection) {
-  experienceObserver.observe(skillsSection);
+if (experienceSection) {
+  experienceObserver.observe(experienceSection);
+} else {
+  revealSkillsAfterExperienceText();
 }
 
 // Timeline reveal animation

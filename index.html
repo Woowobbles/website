@@ -24,7 +24,7 @@
       </video>
     </div>
 
-    <div id="stage">
+    <div id="stage" data-logo-theme="dark">
       <div id="crop">
         <video id="vid" autoplay loop muted playsinline>
           <source src="images/landing/WebM main.webm" type="video/webm" />
@@ -32,7 +32,7 @@
       </div>
     </div>
 
-    <section id="experience">
+    <section id="experience" data-logo-theme="dark">
       <img src="images/landing/experience.png" alt="Experience" />
       <div id="experience-text">
         <span class="line-left"><em>10 years</em> experience in</span>
@@ -75,13 +75,14 @@
       </div>
     </section>
 
-    <section id="projects-timeline" aria-label="Selected projects">
+    <section id="projects-timeline" aria-label="Selected projects" data-logo-theme="light">
       <div class="timeline-shell">
         <p class="timeline-kicker">Selected projects</p>
         <div id="timeline-items"></div>
       </div>
     </section>
 
+    <script src="logo-theme.js" defer></script>
     <script src="main.js" defer></script>
   </body>
 </html>

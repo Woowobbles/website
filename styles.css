@@ -6,6 +6,10 @@ html, body {
   font-weight: 400;
 }
 
+html {
+  scroll-snap-type: y mandatory;
+}
+
 /* ── Header ── */
 header {
   position: fixed;
@@ -37,6 +41,12 @@ header img {
   position: absolute;
   top: 0;
   left: 0;
+  opacity: 1;
+  transition: opacity 220ms ease;
+}
+
+html.logo-use-dark #logo-white {
+  opacity: 0;
 }
 header button {
   background: rgba(244, 244, 244, 0.35);
@@ -81,6 +91,8 @@ header button:hover {
   justify-content: center;
   align-items: center;
   overflow: hidden;
+  scroll-snap-align: start;
+  scroll-snap-stop: always;
 }
 #crop {
   width: 35vw;
@@ -106,6 +118,8 @@ header button:hover {
   display: flex;
   justify-content: center;
   align-items: center;
+  scroll-snap-align: start;
+  scroll-snap-stop: always;
 }
 #experience img {
   position: absolute;
@@ -171,8 +185,10 @@ header button:hover {
   z-index: 3;
   background: #f4f4f4;
   width: 100%;
+  margin-top: 24px;
   padding: 140px 0 120px;
   --timeline-image-zoom: 1.0;
+  scroll-snap-align: start;
 }
 .timeline-shell {
   width: min(1280px, 92vw);
@@ -182,7 +198,7 @@ header button:hover {
   margin: 0 0 24px;
   text-align: center;
   font-family: sans-serif;
-  font-size: 1.05rem;
+  font-size: 1.6rem;
   letter-spacing: 0.01em;
   color: #2a2a2a;
 }
@@ -295,7 +311,7 @@ header button:hover {
   ) scale(var(--timeline-image-zoom, 1.24));
   transform-origin: var(--timeline-image-origin-x, 50%) var(--timeline-image-origin-y, 50%);
   will-change: transform;
-  cursor: zoom-in;
+  cursor: pointer;
 }
 
 .timeline-fullscreen-viewer {
