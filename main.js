@@ -560,8 +560,17 @@ window.addEventListener('touchmove', (e) => {
 }, { passive: false });
 
 // Scroll effects without parallax motion.
-window.addEventListener('scroll', () => {
-  const timelineSection = document.getElementById('projects-timeline');
+const timelineSection = document.getElementById('projects-timeline');
+
+function shouldUpdateTimelineParallax() {
+  if (!timelineSection) return false;
+  const rect = timelineSection.getBoundingClientRect();
+  const viewportH = window.innerHeight || 1;
+  return rect.top < (viewportH * 1.5) && rect.bottom > (viewportH * -0.5);
+}
+
+function applyScrollEffects() {
+  if (!timelineSection) return;
 
   // Logo wipe: clip white logo based on timeline entering viewport.
   if (unlocked) {
@@ -571,10 +580,23 @@ window.addEventListener('scroll', () => {
     logoWhite.style.clipPath = `inset(0px 0px ${clipBottom}px 0px)`;
   }
 
-  updateTimelineImageParallax();
-});
+  if (shouldUpdateTimelineParallax()) {
+    updateTimelineImageParallax();
+  }
+}
 
-window.addEventListener('resize', updateTimelineImageParallax);
+let scrollEffectsRaf = null;
+window.addEventListener('scroll', () => {
+  if (scrollEffectsRaf) return;
+  scrollEffectsRaf = requestAnimationFrame(() => {
+    scrollEffectsRaf = null;
+    applyScrollEffects();
+  });
+}, { passive: true });
+
+window.addEventListener('resize', () => {
+  applyScrollEffects();
+});
 updateTimelineImageParallax();
 
 // Experience section + skills cards entrance animation

@@ -7,7 +7,7 @@ html, body {
 }
 
 html {
-  scroll-snap-type: y mandatory;
+  scroll-snap-type: y proximity;
 }
 
 /* ── Header ── */
@@ -92,7 +92,6 @@ header button:hover {
   align-items: center;
   overflow: hidden;
   scroll-snap-align: start;
-  scroll-snap-stop: always;
 }
 #crop {
   width: 35vw;
@@ -119,7 +118,6 @@ header button:hover {
   justify-content: center;
   align-items: center;
   scroll-snap-align: start;
-  scroll-snap-stop: always;
 }
 #experience img {
   position: absolute;
@@ -188,7 +186,6 @@ header button:hover {
   margin-top: 24px;
   padding: 140px 0 120px;
   --timeline-image-zoom: 1.0;
-  scroll-snap-align: start;
 }
 .timeline-shell {
   width: min(1280px, 92vw);
@@ -222,7 +219,7 @@ header button:hover {
   position: relative;
   min-height: 66vh;
   display: grid;
-  grid-template-columns: minmax(260px, 1fr) 90px 40vw;
+  grid-template-columns: minmax(0, 1fr) 120px minmax(0, 1fr);
   align-items: center;
   gap: 0;
 }
@@ -279,8 +276,8 @@ header button:hover {
   grid-row: 1;
   position: relative;
   --timeline-parallax-room: 240px;
-  width: 40vw;
-  max-width: 40vw;
+  width: min(100%, 560px);
+  max-width: 560px;
   height: clamp(300px, 44vw, 520px);
   align-self: center;
   overflow: hidden;
@@ -359,7 +356,7 @@ header button:hover {
     transform: translateX(-50%);
   }
   .timeline-item {
-    grid-template-columns: minmax(260px, 1fr) 90px 40vw;
+    grid-template-columns: minmax(0, 1fr) 120px minmax(0, 1fr);
     padding-left: 0;
   }
 }

@@ -1,0 +1,232 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Present Pal - Case Study</title>
+    <link rel="stylesheet" href="../project-page.css" />
+    <style>
+      .presentpal-page .case-overview,
+      .presentpal-page .case-zoom-section,
+      .presentpal-page .case-video-section,
+      .presentpal-page .case-centred-copy,
+      .presentpal-page .case-image-section,
+      .presentpal-page .case-news-gallery,
+      .presentpal-page .case-news-followup,
+      .presentpal-page .case-outcomes,
+      .presentpal-page .case-section {
+        background: #FAF7F3;
+      }
+
+      .presentpal-page .case-outcomes-list {
+        margin: 14px 0 0;
+        padding-left: 1.2em;
+        color: #2b2b2b;
+        font-size: clamp(1rem, 1.35vw, 1.2rem);
+        line-height: 1.7;
+      }
+
+      .presentpal-page .case-outcomes-list li {
+        margin: 0 0 8px;
+      }
+
+      .presentpal-page .case-outcomes-list li:last-child {
+        margin-bottom: 0;
+      }
+    </style>
+    <script src="../logo-theme.js" defer></script>
+    <script>
+      (function () {
+        const key = 'timelineProjectTransition';
+        const normalizePath = (value) => {
+          if (typeof value !== 'string') return '/';
+          const withoutIndex = value.replace(/index\.html$/i, '');
+          const normalized = withoutIndex.replace(/\/+$/, '');
+          return normalized === '' ? '/' : normalized;
+        };
+        window.__projectTransitionPayload = null;
+        try {
+          const raw = sessionStorage.getItem(key);
+          if (!raw) return;
+          const payload = JSON.parse(raw);
+          if (!payload) return;
+          const payloadPath = normalizePath(payload.path || '');
+          const currentPath = normalizePath(window.location.pathname);
+          if (payloadPath !== currentPath) return;
+          window.__projectTransitionPayload = payload;
+          document.documentElement.classList.add('page-transition-in');
+          document.documentElement.style.setProperty('--transition-image', `url("${payload.image}")`);
+          const aspect = Number.isFinite(payload.aspect) ? payload.aspect : 0.5625;
+          document.documentElement.style.setProperty('--hero-target-width', payload.targetWidth || '100dvw');
+          document.documentElement.style.setProperty('--hero-target-left', payload.targetLeft || '0px');
+          document.documentElement.style.setProperty('--hero-target-height', payload.targetHeight || `${(aspect * 100).toFixed(3)}vw`);
+          document.documentElement.style.setProperty('--hero-target-top', payload.targetTop || `calc(50dvh - (${(aspect * 100).toFixed(3)}vw * 0.5))`);
+          sessionStorage.removeItem(key);
+        } catch (error) {
+          // Ignore transition payload parsing failures.
+        }
+      }());
+    </script>
+  </head>
+  <body class="case-page--no-parallax presentpal-page" style="--transition-image: url('hero.png'); --hero-target-width: 100dvw; --hero-target-left: 0px; --hero-target-height: 100dvh; --hero-target-top: 0px;">
+    <header>
+      <a id="logo-wrap" href="../index.html" aria-label="Go to homepage">
+        <img src="../images/misc/logo black.png" alt="Logo" />
+        <img id="logo-white" src="../images/misc/logo white.png" alt="Logo" />
+      </a>
+      <button>Resume</button>
+    </header>
+
+    <div id="scroll-indicator">
+      <video autoplay loop muted playsinline>
+        <source src="../images/misc/scroll indicator.webm" type="video/webm" />
+      </video>
+    </div>
+
+    <main class="case-hero" data-logo-theme="dark">
+      <img class="case-hero-media" src="hero.png" alt="Present Pal hero" />
+    </main>
+
+    <section class="case-section case-overview" aria-label="Project overview" data-logo-theme="light">
+      <div class="case-overview-grid">
+        <div class="case-overview-brand">
+          <img class="case-brand-logo" src="../images/Present Pal/logo.png" alt="Present Pal logo" />
+          <h2 class="case-overview-title">Leading product design at an accessible tech startup</h2>
+        </div>
+        <div class="case-overview-copy">
+          <p>The Present Pal app was originally built without design expertise and so had a variety of usability, accessibility, and design issues. There was also substantial tech-debt, so we decided that the best approach would be for a full redesign and rebuild.</p>
+          <p class="case-overview-label"><strong>Objectives:</strong></p>
+          <p>Redesign the app to be more accessible and easier to use. Re-engage dormant users and increase future usage of the app.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="case-section case-image-section" aria-label="Present Pal gallery image one" data-logo-theme="dark">
+      <img class="case-image-section-media" src="../images/Present Pal/Present Pal 1.png" alt="Present Pal gallery image one" />
+    </section>
+
+    <section class="case-section case-image-section" aria-label="Present Pal gallery image two" data-logo-theme="dark">
+      <img class="case-image-section-media" src="../images/Present Pal/Present Pal 2.png" alt="Present Pal gallery image two" />
+    </section>
+
+    <section class="case-section case-centred-copy" aria-label="Present Pal supporting copy" data-logo-theme="light">
+      <div class="case-centred-copy-inner">
+        <h2 class="case-centred-copy-title">Accessibility focused design</h2>
+        <p class="case-centred-copy-text">We worked with a former Senior Accessibility Engineer at Apple, and recruited a neurodiverse group of users for regular usability testing to ensure that our designs met the accessibility needs of our users.</p>
+      </div>
+    </section>
+
+    <section class="case-section case-image-section" aria-label="Present Pal gallery image three" data-logo-theme="dark">
+      <img class="case-image-section-media" src="../images/Present Pal/Present Pal 3.png" alt="Present Pal gallery image three" />
+    </section>
+
+    <section class="case-section case-image-section" aria-label="Present Pal gallery image four" data-logo-theme="dark">
+      <img class="case-image-section-media" src="../images/Present Pal/Present Pal 4.png" alt="Present Pal gallery image four" />
+    </section>
+
+
+    <section class="case-section case-outcomes" aria-label="Present Pal outcomes section" data-logo-theme="light">
+      <div class="case-outcomes-grid">
+        <div class="case-outcomes-media-wrap">
+          <img class="case-outcomes-media" src="../images/Present Pal/Present Pal 5.png" alt="Present Pal outcomes visual" />
+        </div>
+        <div class="case-outcomes-copy">
+          <p class="case-outcomes-title"><strong>Outcomes</strong></p>
+          <p class="case-outcomes-text">The new Present Pal was easier for users to use, more accessible, and allowed us to expand our market within the UK, and into educational institutions in the United States.</p>
+          <p class="case-outcomes-text">Since releasing the new Present Pal:</p>
+          <ul class="case-outcomes-list">
+            <li>The company has tripled its market share in the industry.</li>
+            <li>We managed to re-engage and convert dozens of dormant customers.</li>
+            <li>The product's Sean Ellis Test results reached 52%.</li>
+
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <script>
+      (function () {
+        const payload = window.__projectTransitionPayload;
+        if (!payload) return;
+        const heroImg = document.querySelector('.case-hero-media');
+        if (heroImg && payload.image) {
+          heroImg.src = payload.image;
+        }
+      }());
+
+      (function () {
+        const RETURN_ANCHOR_KEY = 'projectReturnAnchor';
+        window.addEventListener('pagehide', () => {
+          try {
+            sessionStorage.setItem(RETURN_ANCHOR_KEY, JSON.stringify({ href: 'presentpal/' }));
+          } catch (error) {
+            // Ignore storage failures.
+          }
+        });
+      }());
+
+      (function () {
+        const indicator = document.getElementById('scroll-indicator');
+        const heroSection = document.querySelector('.case-hero');
+        if (!indicator || !heroSection) return;
+
+        const clamp = (value, min, max) => Math.min(max, Math.max(min, value));
+        let ticking = false;
+
+        const updateIndicatorOpacity = () => {
+          ticking = false;
+          const heroRect = heroSection.getBoundingClientRect();
+          const fadeDistance = Math.max(1, heroRect.height * 0.8);
+          const progress = clamp((-heroRect.top) / fadeDistance, 0, 1);
+          indicator.style.opacity = (1 - progress).toFixed(3);
+        };
+
+        const requestIndicatorUpdate = () => {
+          if (ticking) return;
+          ticking = true;
+          window.requestAnimationFrame(updateIndicatorOpacity);
+        };
+
+        window.addEventListener('scroll', requestIndicatorUpdate, { passive: true });
+        window.addEventListener('resize', requestIndicatorUpdate);
+        requestIndicatorUpdate();
+      }());
+
+      (function () {
+        const revealTargets = document.querySelectorAll(
+          '.case-overview-title, .case-overview-copy p, .case-centred-copy-title, .case-centred-copy-text, .case-outcomes-title, .case-outcomes-text, .case-outcomes-list li'
+        );
+
+        if (revealTargets.length === 0) return;
+
+        revealTargets.forEach((node) => {
+          node.classList.add('reveal-on-scroll');
+        });
+
+        const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+        if (reduceMotion) {
+          revealTargets.forEach((node) => node.classList.add('is-visible'));
+          return;
+        }
+
+        const revealObserver = new IntersectionObserver((entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              entry.target.classList.add('is-visible');
+              revealObserver.unobserve(entry.target);
+            }
+          });
+        }, {
+          threshold: 0.18,
+          rootMargin: '0px 0px -8% 0px'
+        });
+
+        revealTargets.forEach((node, index) => {
+          node.style.transitionDelay = `${Math.min(index * 70, 320)}ms`;
+          revealObserver.observe(node);
+        });
+      }());
+    </script>
+  </body>
+</html>
