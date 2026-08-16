@@ -6,7 +6,7 @@ const timelineProjects = [
     {
     type: 'UX Research',
     title: 'Trade Me',
-    summary: 'Improving listing and buying journeys through product and UX collaboration.',
+    summary: "Leading and scaling the UX Research function at New Zealand's largest marketplace - Quadrupling the research output of the team in 3 years.",
     image: 'trademe/hero.png',
     alt: 'Trade Me project hero image',
     href: 'trademe/',
@@ -21,7 +21,7 @@ const timelineProjects = [
   {
     type: 'Website Design',
     title: 'GT Omega',
-    summary: 'Modernising the e-commerce experience for a leading sim racing brand.',
+    summary: 'Refreshing the brand, and modernising the e-commerce experience for a leading sim racing brand',
     image: 'gtomega/hero.png',
     alt: 'GT Omega website hero image',
     href: 'gtomega/',
@@ -36,7 +36,7 @@ const timelineProjects = [
   {
     type: 'App Design',
     title: 'Present Pal',
-    summary: 'Improving listing and buying journeys through product and UX collaboration.',
+    summary: 'Founding and leading the product and design functions at an accessibility-focused ed-tech startup. Designing a product now being used by over 40,000 students in over 100 universities worldwide.',
     image: 'presentpal/hero.png',
     alt: 'Present Pal project hero image',
     href: 'presentpal/',
@@ -51,7 +51,7 @@ const timelineProjects = [
   {
     type: 'Website Design',
     title: 'This Student Needs',
-    summary: 'Improving listing and buying journeys through product and UX collaboration.',
+    summary: 'Redesigning a hub that connects disabled students with the support they need for university - increasing sign-ups, time on site, and conversion.',
     image: 'thisstudentneeds/hero.png',
     alt: 'This Student Needs project hero image',
     href: 'thisstudentneeds/',
@@ -477,7 +477,8 @@ function updateLogoClip(wVw, hVh) {
 }
 
 function applyProgress(p) {
-  const w = 35 + 65 * p; // 35vw -> 100vw
+  const startWidth = window.matchMedia('(max-width: 900px)').matches ? 80 : 35;
+  const w = startWidth + (100 - startWidth) * p;
   const h = 60 + 40 * p; // 60vh -> 100vh
   crop.style.width = p >= 1 ? '100%' : w + 'vw';
   crop.style.height = p >= 1 ? '100%' : h + 'vh';
