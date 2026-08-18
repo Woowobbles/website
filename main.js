@@ -578,6 +578,23 @@ window.addEventListener('wheel', (e) => {
     return;
   }
 
+  if (experienceSnapInProgress) {
+    e.preventDefault();
+    return;
+  }
+
+  if (e.deltaY > 0 && experienceSection && window.innerWidth > 900 && window.scrollY < experienceSection.offsetTop) {
+    e.preventDefault();
+    startExperienceSnap(experienceSection.offsetTop);
+    return;
+  }
+
+  if (e.deltaY < 0 && experienceSection && window.innerWidth > 900 && Math.abs(window.scrollY - experienceSection.offsetTop) <= 40) {
+    e.preventDefault();
+    startExperienceSnap(0);
+    return;
+  }
+
   // At very top, reverse scroll transitions back into locked intro expansion.
   if (window.scrollY <= 0 && e.deltaY < 0) {
     e.preventDefault();
@@ -597,6 +614,23 @@ window.addEventListener('touchmove', (e) => {
   if (!unlocked) {
     e.preventDefault();
     processScroll(dy);
+    return;
+  }
+
+  if (experienceSnapInProgress) {
+    e.preventDefault();
+    return;
+  }
+
+  if (dy > 0 && experienceSection && window.innerWidth > 900 && window.scrollY < experienceSection.offsetTop) {
+    e.preventDefault();
+    startExperienceSnap(experienceSection.offsetTop);
+    return;
+  }
+
+  if (dy < 0 && experienceSection && window.innerWidth > 900 && Math.abs(window.scrollY - experienceSection.offsetTop) <= 40) {
+    e.preventDefault();
+    startExperienceSnap(0);
     return;
   }
 
@@ -655,7 +689,80 @@ function applyScrollEffects() {
 }
 
 let scrollEffectsRaf = null;
+let experienceSnapTimer = null;
+let previousScrollY = window.scrollY;
+let experienceSnapInProgress = false;
+
+function animateScrollTo(target, duration) {
+  const start = window.scrollY;
+  const distance = target - start;
+  const startTime = performance.now();
+
+  const step = (now) => {
+    const progress = Math.min(1, (now - startTime) / duration);
+    const eased = progress < 0.5
+      ? 4 * progress * progress * progress
+      : 1 - Math.pow(-2 * progress + 2, 3) / 2;
+    window.scrollTo(0, start + (distance * eased));
+
+    if (progress < 1) {
+      window.requestAnimationFrame(step);
+    }
+  };
+
+  window.requestAnimationFrame(step);
+}
+
+function startExperienceSnap(target = experienceSection?.offsetTop) {
+  if (experienceSnapInProgress || !experienceSection || window.innerWidth <= 900) return;
+
+  experienceSnapInProgress = true;
+  const snapRoots = [document.documentElement, document.body];
+  const previousSnapTypes = snapRoots.map((root) => root.style.scrollSnapType);
+  snapRoots.forEach((root) => {
+    root.style.scrollSnapType = 'none';
+  });
+  animateScrollTo(target, 1000);
+  window.setTimeout(() => {
+    snapRoots.forEach((root, index) => {
+      root.style.scrollSnapType = previousSnapTypes[index];
+    });
+    experienceSnapInProgress = false;
+  }, 1050);
+}
+
+function scheduleExperienceSnap() {
+  if (experienceSnapInProgress) return;
+  if (experienceSnapTimer) {
+    clearTimeout(experienceSnapTimer);
+  }
+
+  experienceSnapTimer = window.setTimeout(() => {
+    experienceSnapTimer = null;
+    if (!unlocked || !experienceSection || window.innerWidth <= 900) return;
+
+    const viewportHeight = window.innerHeight || 1;
+    const experienceStart = experienceSection.offsetTop;
+    const currentScrollY = window.scrollY;
+    const scrollDirection = currentScrollY >= previousScrollY ? 1 : -1;
+    const distanceFromExperience = currentScrollY - experienceStart;
+    const snapThreshold = viewportHeight * 0.5;
+
+    if (Math.abs(distanceFromExperience) <= snapThreshold) {
+      const target = scrollDirection < 0 && currentScrollY < (experienceStart * 0.5)
+        ? 0
+        : experienceStart;
+      startExperienceSnap(target);
+    } else if (scrollDirection < 0 && currentScrollY < snapThreshold) {
+      startExperienceSnap(0);
+    }
+
+    previousScrollY = currentScrollY;
+  }, 140);
+}
+
 window.addEventListener('scroll', () => {
+  scheduleExperienceSnap();
   if (scrollEffectsRaf) return;
   scrollEffectsRaf = requestAnimationFrame(() => {
     scrollEffectsRaf = null;

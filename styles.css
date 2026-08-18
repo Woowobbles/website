@@ -399,6 +399,17 @@ html.logo-use-dark header .resume-button {
 }
 
 @media (min-width: 901px) {
+  html,
+  body {
+    scroll-snap-type: y mandatory;
+  }
+
+  #stage,
+  #experience {
+    scroll-snap-align: start;
+    scroll-snap-stop: always;
+  }
+
   #timeline-items::before {
     left: 50%;
     transform: translateX(-50%);
@@ -792,7 +803,7 @@ html.logo-use-dark header .resume-button {
   }
 
   .contact-image {
-    aspect-ratio: 4 / 5;
+    aspect-ratio: 1 / 1;
     max-width: 280px;
     width: 100%;
     margin: 0;
