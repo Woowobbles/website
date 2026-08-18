@@ -164,7 +164,7 @@ html.logo-use-dark header .resume-button {
   top: -10%;
   object-fit: cover;
   opacity: 1;
-  transform: none;
+  transform: translate3d(0, var(--experience-parallax-y, 0px), 0);
   transition: none;
 }
 #experience-text {
@@ -198,7 +198,7 @@ html.logo-use-dark header .resume-button {
 /* Triggered when #experience gains .in-view */
 #experience.in-view img {
   opacity: 1;
-  transform: translateY(0);
+  transform: translate3d(0, var(--experience-parallax-y, 0px), 0);
 }
 #experience.in-view .line-left {
   animation: slideUpBounce 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) 0.55s forwards;
@@ -556,13 +556,13 @@ html.logo-use-dark header .resume-button {
 
 /* Cards pop in when #skills gains .in-view */
 #skills.in-view .skill-card:nth-child(1) {
-  animation: slideUpBounce 0.7s cubic-bezier(0.34, 1.56, 0.64, 1) 0.1s forwards;
+  animation: slideUpBounce 0.7s cubic-bezier(0.34, 1.56, 0.64, 1) 0.05s forwards;
 }
 #skills.in-view .skill-card:nth-child(2) {
-  animation: slideUpBounce 0.7s cubic-bezier(0.34, 1.56, 0.64, 1) 0.25s forwards;
+  animation: slideUpBounce 0.7s cubic-bezier(0.34, 1.56, 0.64, 1) 0.15s forwards;
 }
 #skills.in-view .skill-card:nth-child(3) {
-  animation: slideUpBounce 0.7s cubic-bezier(0.34, 1.56, 0.64, 1) 0.4s forwards;
+  animation: slideUpBounce 0.7s cubic-bezier(0.34, 1.56, 0.64, 1) 0.25s forwards;
 }
 
 @media (max-width: 900px) {

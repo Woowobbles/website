@@ -607,7 +607,27 @@ window.addEventListener('touchmove', (e) => {
   }
 }, { passive: false });
 
-// Scroll effects without parallax motion.
+function updateExperienceParallax() {
+  if (!experienceSection) return;
+
+  const image = experienceSection.querySelector('img');
+  if (!image) return;
+
+  if (prefersReducedMotion || window.innerWidth <= 900) {
+    image.style.setProperty('--experience-parallax-y', '0px');
+    return;
+  }
+
+  const sectionStart = experienceSection.offsetTop;
+  const scrollDistance = Math.max(0, window.scrollY - sectionStart);
+  const offsetY = Math.min(120, scrollDistance * 0.14);
+  image.style.setProperty(
+    '--experience-parallax-y',
+    `${offsetY.toFixed(2)}px`
+  );
+}
+
+// Scroll effects for the experience and project timeline sections.
 const timelineSection = document.getElementById('projects-timeline');
 
 function shouldUpdateTimelineParallax() {
@@ -618,6 +638,7 @@ function shouldUpdateTimelineParallax() {
 }
 
 function applyScrollEffects() {
+  updateExperienceParallax();
   if (!timelineSection) return;
 
   // Logo wipe: clip white logo based on timeline entering viewport.
@@ -655,7 +676,7 @@ let skillsRevealTimer = null;
 function revealSkillsAfterExperienceText() {
   if (!skillsSection || skillsSection.classList.contains('in-view')) return;
 
-  const revealDelayMs = prefersReducedMotion ? 80 : 1780;
+  const revealDelayMs = prefersReducedMotion ? 80 : 1200;
   if (skillsRevealTimer) {
     clearTimeout(skillsRevealTimer);
   }
@@ -683,6 +704,8 @@ if (experienceSection) {
 } else {
   revealSkillsAfterExperienceText();
 }
+
+updateExperienceParallax();
 
 // Timeline reveal animation
 const timelineObserver = new IntersectionObserver((entries) => {
