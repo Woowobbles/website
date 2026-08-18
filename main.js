@@ -6,6 +6,7 @@ const timelineProjects = [
     {
     type: 'UX Research',
     title: 'Trade Me',
+    logo: 'images/Trade Me/Logo.png',
     summary: "Leading and scaling the UX Research function at New Zealand's largest marketplace - Quadrupling the research output of the team in 3 years.",
     image: 'trademe/hero.png',
     alt: 'Trade Me project hero image',
@@ -21,6 +22,7 @@ const timelineProjects = [
   {
     type: 'Website Design',
     title: 'GT Omega',
+    logo: 'images/GT Omega/logo.png',
     summary: 'Refreshing the brand, and modernising the e-commerce experience for a leading sim racing brand',
     image: 'gtomega/hero.png',
     alt: 'GT Omega website hero image',
@@ -36,6 +38,7 @@ const timelineProjects = [
   {
     type: 'App Design',
     title: 'Present Pal',
+    logo: 'images/Present Pal/logo.png',
     summary: 'Founding and leading the product and design functions at an accessibility-focused ed-tech startup. Designing a product now being used by over 40,000 students in over 100 universities worldwide.',
     image: 'presentpal/hero.png',
     alt: 'Present Pal project hero image',
@@ -51,6 +54,7 @@ const timelineProjects = [
   {
     type: 'Website Design',
     title: 'This Student Needs',
+    logo: 'images/This Student Needs/logo.png',
     summary: 'Redesigning a hub that connects disabled students with the support they need for university - increasing sign-ups, time on site, and conversion.',
     image: 'thisstudentneeds/hero.png',
     alt: 'This Student Needs project hero image',
@@ -175,8 +179,7 @@ function renderTimeline() {
     return `
       <article class="timeline-item${orientationClass}">
         <div class="timeline-content">
-          <p class="timeline-type">${project.type}</p>
-          <h2 class="timeline-title">${project.title}</h2>
+          <img src="${project.logo}" alt="${project.title} logo" class="timeline-logo" data-project-index="${index}" tabindex="0" role="button" aria-label="View ${project.title} project" />
           <p class="timeline-summary">${project.summary}</p>
         </div>
         ${mediaMarkup}
@@ -331,6 +334,26 @@ function setupTimelineImageFullscreen() {
       openImageFullscreen(img, destinationHref);
     });
   });
+
+  document.querySelectorAll('.timeline-logo').forEach((logo) => {
+    const projectIndex = Number(logo.dataset.projectIndex);
+    const projectImage = timelineMediaImages[projectIndex];
+    if (!projectImage) return;
+
+    const openProjectImage = (event) => {
+      event.preventDefault();
+      const media = projectImage.closest('.timeline-media');
+      const destinationHref = media ? media.getAttribute('data-href') : null;
+      openImageFullscreen(projectImage, destinationHref);
+    };
+
+    logo.addEventListener('click', openProjectImage);
+    logo.addEventListener('keydown', (event) => {
+      if (event.key === 'Enter' || event.key === ' ') {
+        openProjectImage(event);
+      }
+    });
+  });
 }
 
 setupTimelineImageFullscreen();
@@ -340,7 +363,15 @@ function updateTimelineImageParallax() {
 
   const viewportH = window.innerHeight;
   const viewportCenter = viewportH * 0.5;
-  const parallaxRange = prefersReducedMotion ? 70 : 160;
+  
+  let parallaxRange;
+  if (prefersReducedMotion) {
+    parallaxRange = 70;
+  } else if (window.innerWidth < 840) {
+    parallaxRange = 60; // Mobile parallax range
+  } else {
+    parallaxRange = 160;
+  }
 
   timelineMediaImages.forEach((img) => {
     const media = img.closest('.timeline-media');
@@ -434,8 +465,24 @@ function restoreFromReturnAnchor(returnAnchor) {
 
 const returnAnchor = isHistoryReturnNavigation() ? consumeReturnAnchor() : null;
 
-if (returnAnchor) {
-  restoreFromReturnAnchor(returnAnchor);
+// Also check for direct project return (from back button)
+let projectReturnAnchor = null;
+if (!returnAnchor) {
+  try {
+    const raw = sessionStorage.getItem('returnToProject');
+    if (raw) {
+      projectReturnAnchor = JSON.parse(raw);
+      sessionStorage.removeItem('returnToProject');
+    }
+  } catch (error) {
+    projectReturnAnchor = null;
+  }
+}
+
+const finalReturnAnchor = returnAnchor || projectReturnAnchor;
+
+if (finalReturnAnchor) {
+  restoreFromReturnAnchor(finalReturnAnchor);
 } else {
   lockIntroScroll();
   // Apply initial state so white logo is fully clipped at load
@@ -648,3 +695,35 @@ const timelineObserver = new IntersectionObserver((entries) => {
 }, { threshold: 0.2 });
 
 document.querySelectorAll('.timeline-item').forEach((item) => timelineObserver.observe(item));
+
+// Email copy to clipboard
+const emailBtn = document.getElementById('email-copy-btn');
+if (emailBtn) {
+  emailBtn.addEventListener('click', () => {
+    navigator.clipboard.writeText('hello@euancolley.com').then(() => {
+      const contactInfo = emailBtn.querySelector('.contact-info');
+      const originalHTML = contactInfo.innerHTML;
+      contactInfo.innerHTML = '<p style="margin: 0; font-size: 0.95rem; font-family: sans-serif; color: #8A8989;">Copied to clipboard!</p>';
+      setTimeout(() => {
+        contactInfo.innerHTML = originalHTML;
+      }, 2000);
+    }).catch(err => {
+      console.error('Failed to copy email address');
+    });
+  });
+}
+
+// Contact section reveal animation
+const contactObserver = new IntersectionObserver((entries) => {
+  entries.forEach((entry) => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('in-view');
+      contactObserver.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.2 });
+
+const contactSection = document.getElementById('contact');
+if (contactSection) {
+  contactObserver.observe(contactSection);
+}

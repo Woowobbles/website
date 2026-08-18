@@ -4,6 +4,7 @@ html, body {
   background: #f4f4f4;
   font-family: 'Newsreader', Georgia, serif;
   font-weight: 400;
+  overflow-x: hidden;
 }
 
 html {
@@ -13,6 +14,16 @@ html {
 @media (max-width: 900px) {
   html {
     scroll-snap-type: none;
+  }
+
+  header {
+    padding: 16px 5vw;
+  }
+
+  header .resume-button {
+    font-size: 0.7rem;
+    padding: 4px 10px;
+    white-space: nowrap;
   }
 }
 
@@ -67,6 +78,27 @@ header button {
 header button:hover {
   background: #111;
   color: #fff;
+}
+header .resume-button {
+  background: rgba(244, 244, 244, 0.35);
+  border: 0px solid #111;
+  color: #111;
+  font-size: 0.8rem;
+  padding: 6px 16px;
+  border-radius: 4px;
+  cursor: pointer;
+  letter-spacing: 0.03em;
+  text-decoration: none;
+  display: inline-block;
+  transition: background 220ms ease, color 220ms ease;
+}
+header .resume-button:hover {
+  background: #111;
+  color: #fff;
+}
+
+html.logo-use-dark header .resume-button {
+  background: rgba(0, 0, 0, 0.04);
 }
 
 /* ── Scroll indicator ── */
@@ -270,6 +302,16 @@ header button:hover {
   line-height: 1.02;
   font-weight: 400;
 }
+.timeline-logo {
+  margin: 0 0 16px;
+  width: min(100%, 340px);
+  height: auto;
+  display: block;
+  cursor: pointer;
+}
+.timeline-item:nth-child(4) .timeline-logo {
+  width: min(100%, 200px);
+}
 .timeline-summary {
   margin: 16px 0 0;
   color: #727272;
@@ -454,6 +496,14 @@ header button:hover {
   .timeline-title {
     font-size: clamp(1.2rem, 5vw, 1.8rem);
   }
+  .timeline-logo {
+    margin-bottom: 12px;
+    width: min(36vw, 150px);
+  }
+
+  .timeline-item:nth-child(4) .timeline-logo {
+    width: min(36vw, 100px);
+  }
   .timeline-summary {
     margin-top: 10px;
     font-size: 0.72rem;
@@ -542,6 +592,14 @@ header button:hover {
 
   .skill-card {
     padding: 18px 16px;
+    background: transparent;
+    border-radius: 0;
+    box-shadow: none;
+  }
+
+  .skill-card h3,
+  .skill-card .tags {
+    display: none;
   }
 
   .skill-card h3 {
@@ -552,5 +610,257 @@ header button:hover {
   .tags span {
     font-size: 0.65rem;
     padding: 4px 8px;
+  }
+}
+
+/* ── Contact section ── */
+#contact {
+  position: relative;
+  z-index: 4;
+  background: #f5f4f3;
+  color: #2b2b2b;
+  min-height: 100vh;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.contact-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 80px;
+  align-items: center;
+  max-width: 1200px;
+  margin: 0 auto;
+  width: 100%;
+  position: relative;
+  padding: 60px 10vw;
+  flex: 1;
+  justify-content: center;
+}
+
+.contact-image {
+  position: relative;
+  width: 400px;
+  aspect-ratio: 4 / 4;
+  margin-left: auto;
+  margin-right: 0;
+  margin-bottom: -80px;
+  z-index: 5;
+  opacity: 0;
+  transform: translateY(40px);
+}
+
+.contact-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 32px;
+  display: block;
+}
+
+.contact-content h2 {
+  margin: 0 0 48px;
+  font-size: clamp(2rem, 5vw, 3.2rem);
+  font-weight: 400;
+  line-height: 1.2;
+  color: #8A8989;
+  font-family: 'Newsreader', Georgia, serif;
+  opacity: 0;
+  transform: translateY(40px);
+}
+
+#contact.in-view .contact-content h2 {
+  animation: slideUpBounce 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) 0.2s forwards;
+}
+
+.contact-links {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.contact-button {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  padding: 8px;
+  border-radius: 12px;
+  background: rgba(0, 0, 0, 0.00);
+  text-decoration: none;
+  transition: all 280ms ease;
+  cursor: pointer;
+  border: none;
+  font-family: inherit;
+  font-size: inherit;
+  color: inherit;
+  opacity: 0;
+  transform: translateY(40px);
+}
+
+#contact.in-view .contact-image {
+  animation: slideUpBounce 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) 0.2s forwards;
+}
+
+#contact.in-view .contact-button:nth-child(1) {
+  animation: slideUpBounce 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) 0.4s forwards;
+}
+
+#contact.in-view .contact-button:nth-child(2) {
+  animation: slideUpBounce 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) 0.6s forwards;
+}
+
+.contact-button:hover {
+  background: rgba(0, 0, 0, 0.04);
+  border-color: rgba(0, 0, 0, 0.12);
+  transform: translateX(8px);
+}
+
+.contact-icon-wrapper {
+  width: 64px;
+  height: 64px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.contact-icon-wrapper img {
+  width: 32px;
+  height: 32px;
+  display: block;
+}
+
+.contact-info {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.contact-info h3 {
+  margin: 0 0 4px;
+  font-size: 1.1rem;
+  font-weight: 700;
+  font-family: 'Newsreader', Georgia, serif;
+  color: #2b2b2b;
+  text-align: left;
+}
+
+.contact-info p {
+  margin: 0;
+  font-size: 0.95rem;
+  font-family: 'Newsreader', Georgia, serif;
+  color: #8A8989;
+  text-align: left;
+}
+
+.contact-footer {
+  background: #2F2D2B;
+  text-align: center;
+  padding: 60px 10vw 40px;
+  margin: 40px -10vw 0 -10vw;
+  width: calc(100% );
+  font-family: Newsreader, Georgia, serif;
+}
+
+.contact-footer p {
+  margin: 0;
+  font-size: 0.95rem;
+  font-family: 'Newsreader', Georgia, serif;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+@media (max-width: 900px) {
+  #contact {
+    min-height: 0;
+    padding: 60px 0 0;
+    gap: 0;
+  }
+
+  .contact-container {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 12px;
+    padding: 0 5vw;
+    box-sizing: border-box;
+    max-width: 100%;
+    width: 100%;
+    justify-items: center;
+    text-align: center;
+    gap: 20px;
+  }
+
+  .contact-image {
+    aspect-ratio: 4 / 5;
+    max-width: 280px;
+    width: 100%;
+    margin: 0;
+  }
+
+  .contact-content {
+    text-align: center;
+    width: 100%;
+  }
+
+  .contact-content h2 {
+    font-size: 1.4rem;
+    margin-bottom: 24px;
+  }
+
+  .contact-links {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    gap: 16px;
+  }
+
+  .contact-button {
+    position: relative;
+    padding: 16px;
+    justify-content: center;
+    width: 280px;
+    box-sizing: border-box;
+    margin-inline: auto;
+  }
+
+  .contact-button .contact-icon-wrapper {
+    position: absolute;
+    left: 16px;
+  }
+
+  .contact-button .contact-info {
+    width: 100%;
+  }
+
+  .contact-info h3,
+  .contact-info p {
+    text-align: center;
+  }
+
+  .contact-icon-wrapper {
+    width: 56px;
+    height: 56px;
+  }
+
+  .contact-icon-wrapper img {
+    width: 28px;
+    height: 28px;
+  }
+
+  .contact-info h3 {
+    font-size: 0.95rem;
+  }
+
+  .contact-info p {
+    font-size: 0.85rem;
+  }
+
+  .contact-footer {
+    margin: 40px 0 0;
+    padding: 32px 5vw 24px;
+    width: 100%;
+    box-sizing: border-box;
   }
 }

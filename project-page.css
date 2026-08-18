@@ -77,6 +77,58 @@ header button:hover {
   color: #fff;
 }
 
+header .resume-button {
+  appearance: none;
+  -webkit-appearance: none;
+  background: rgba(244, 244, 244, 0.35);
+  border: 0 solid #111;
+  color: #111;
+  font-family: inherit;
+  font-size: 0.8rem;
+  font-weight: 400;
+  line-height: normal;
+  box-sizing: border-box;
+  padding: 6px 16px;
+  border-radius: 4px;
+  cursor: pointer;
+  letter-spacing: 0.03em;
+  text-decoration: none;
+  display: inline-block;
+  transition: background 220ms ease, color 220ms ease;
+}
+
+header .resume-button:hover {
+  background: #111;
+  color: #fff;
+}
+
+html.logo-use-dark header .resume-button {
+  background: rgba(0, 0, 0, 0.04);
+}
+
+#back-to-projects {
+  position: fixed;
+  top: 56px;
+  left: 10vw;
+  background: rgba(244, 244, 244, 0.35);
+  border: 0px solid #111;
+  color: #111;
+  font-size: 0.75rem;
+  padding: 6px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  letter-spacing: 0.03em;
+  font-family: 'Newsreader', Georgia, serif;
+  z-index: 13049;
+  white-space: nowrap;
+  transition: background 200ms ease, color 200ms ease;
+}
+
+#back-to-projects:hover {
+  background: #111;
+  color: #fff;
+}
+
 #scroll-indicator {
   position: fixed;
   bottom: 24px;
@@ -527,7 +579,17 @@ header button:hover {
   transform: translateY(0);
 }
 
-@media (max-width: 840px) {
+@media (max-width: 900px) {
+  header {
+    padding: 16px 5vw;
+  }
+
+  header .resume-button {
+    font-size: 0.7rem;
+    padding: 4px 10px;
+    white-space: nowrap;
+  }
+
   .case-overview-grid {
     grid-template-columns: 1fr;
     gap: 34px;
@@ -541,6 +603,17 @@ header button:hover {
 
   .case-brand-logo {
     width: min(72vw, 300px);
+  }
+
+  #back-to-projects {
+    font-size: 0.65rem;
+    padding: 4px 8px;
+    top: 52px;
+    left: 5vw;
+  }
+
+  .case-centred-copy-text {
+    font-size: clamp(0.9rem, 1.4vw, 1.1rem);
   }
 
   .case-overview-brand,

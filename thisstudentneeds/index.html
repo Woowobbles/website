@@ -4,6 +4,9 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>This Student Needs - Case Study</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Newsreader:wght@400;700&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="../project-page.css" />
     <script src="../logo-theme.js" defer></script>
     <script>
@@ -45,7 +48,8 @@
         <img src="../images/misc/logo black.png" alt="Logo" />
         <img id="logo-white" src="../images/misc/logo white.png" alt="Logo" />
       </a>
-      <button>Resumé</button>
+      <button id="back-to-projects" aria-label="Back to projects">← Back to projects</button>
+      <button type="button" class="resume-button" onclick="const resumeLink = document.createElement('a'); resumeLink.href = '../EC Resumé.pdf'; resumeLink.download = 'EC Resumé.pdf'; resumeLink.click();">Resumé</button>
     </header>
 
     <div id="scroll-indicator">
@@ -54,7 +58,27 @@
       </video>
     </div>
 
-    <main class="case-hero" data-logo-theme="light">
+    <script>
+      (function() {
+        const backButton = document.getElementById('back-to-projects');
+        if (!backButton) return;
+        
+        backButton.addEventListener('click', function(e) {
+          e.preventDefault();
+          
+          // Store return anchor in session storage
+          const returnPayload = {
+            href: 'thisstudentneeds/'
+          };
+          sessionStorage.setItem('returnToProject', JSON.stringify(returnPayload));
+          
+          // Navigate to home
+          window.location.href = '../index.html';
+        });
+      })();
+    </script>
+
+    <main class="case-hero" data-logo-theme="dark">
       <img class="case-hero-media" src="hero.png" alt="This Student Needs hero" />
     </main>
 
@@ -72,7 +96,7 @@
       </div>
     </section>
 
-    <section class="case-section case-zoom-section" aria-label="This Student Needs gallery image" data-logo-theme="light" style="--zoom-start: 1.3; --zoom-end: 1;">
+    <section class="case-section case-zoom-section" aria-label="This Student Needs gallery image" data-logo-theme="light" style="--zoom-start: 1.3; --zoom-end: 1; background: #FAF7F3;">
       <img class="case-zoom-image" src="../images/This Student Needs/TSN 1.png" alt="This Student Needs project visual" />
     </section>
 
