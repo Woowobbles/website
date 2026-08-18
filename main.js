@@ -444,7 +444,7 @@ function scrollToTimelineAnchor(href) {
   window.scrollTo(0, scrollTop);
 }
 
-const SCROLL_NEEDED = 600; // px of scroll delta to complete the animation
+const SCROLL_NEEDED = window.matchMedia('(max-width: 900px)').matches ? 160 : 600; // px of scroll delta to complete the animation
 let accumulated = 0;
 let unlocked = false;
 let autoScrollRaf = null;
@@ -549,15 +549,13 @@ function processScroll(delta) {
   }
 }
 
-document.getElementById('scroll-indicator').addEventListener('click', () => {
-  if (unlocked) return;
-  if (autoScrollRaf) return;
-  const DURATION = 900;
+function completeIntroAnimation(duration) {
+  if (unlocked || autoScrollRaf) return;
   const startVal = accumulated;
   const startTime = performance.now();
 
   function step(now) {
-    const t = Math.min((now - startTime) / DURATION, 1);
+    const t = Math.min((now - startTime) / duration, 1);
     const ease = t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
     accumulated = startVal + (SCROLL_NEEDED - startVal) * ease;
     processScroll(0);
@@ -569,6 +567,10 @@ document.getElementById('scroll-indicator').addEventListener('click', () => {
   }
 
   autoScrollRaf = requestAnimationFrame(step);
+}
+
+document.getElementById('scroll-indicator').addEventListener('click', () => {
+  completeIntroAnimation(900);
 });
 
 window.addEventListener('wheel', (e) => {
@@ -613,7 +615,11 @@ window.addEventListener('touchmove', (e) => {
 
   if (!unlocked) {
     e.preventDefault();
-    processScroll(dy);
+    if (window.innerWidth <= 900 && dy > 0) {
+      completeIntroAnimation(1000);
+    } else {
+      processScroll(dy);
+    }
     return;
   }
 

@@ -205,6 +205,7 @@ html.logo-use-dark header .resume-button {
 
 .case-brand-logo {
   width: min(100%, 340px);
+  max-width: 100%;
   height: auto;
   display: block;
 }
